@@ -1,0 +1,6 @@
+*.bat
+*.s
+*.exe
+*.txt
+
+.vscode/
