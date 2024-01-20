@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "tokenisation/tokenisation.h"
+#include "parser/parsing.h"
 
 int main(int argc, char* argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char* argv[])
     if (source_code.is_open()){
         list_of_token token_list = tokenisation(source_code);
         token_serialize(token_list);
+        std::cout << parsing(token_list);
         token_list_delete(token_list);
     }
     else{

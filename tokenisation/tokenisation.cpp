@@ -1,6 +1,3 @@
-#ifndef TOKENISATION_H
-#define TOKENISATION_H
-
 #include <iostream>
 #include <list>
 #include <fstream>
@@ -33,7 +30,6 @@ list_of_token token_serialize(list_of_token token_list){
         std::cout << "error in open file for token serializing" << std::endl;
     }
 
-    int size = token_list->size();
     std::list<token>::iterator it;
     for( it = token_list->begin(); it != token_list->end(); it++){
         myfile << token_to_string(*it);
@@ -88,5 +84,3 @@ list_of_token tokenisation(std::ifstream &code){
 void token_list_delete(list_of_token x){
     delete x;
 }
-
-#endif
