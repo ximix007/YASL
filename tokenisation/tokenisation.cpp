@@ -6,12 +6,7 @@
 
 #include "token_type.h"
 
-struct token{
-    token_type type;
-    std::string token_data;
-};
-
-typedef std::list<token>* list_of_token;
+#include "tokenisation.h"
 
 std::string token_to_string(token x){
     std::string result;

@@ -6,8 +6,10 @@
 
 #include "AST_element.h"
 
-AST_element::AST_element(token token): primary_token {token}{
-    primary_token = token;
+AST_element::AST_element(token token): primary_token {token}{}
+
+AST_element::AST_element(){
+    primary_token = token{NULL_TOKEN, ""};
 }
 
 void AST_element::add_depend(AST_element depend){
@@ -30,4 +32,12 @@ std::string AST_element::to_string(){
     }
     result.append(" )");
     return result;
+}
+
+void AST_element::pop_depend(){
+    depend_tokens.pop_back();
+}
+
+AST_element AST_element::get_last_depend(){
+    return depend_tokens.back();
 }
