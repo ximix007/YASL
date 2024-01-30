@@ -20,7 +20,7 @@ public:
 
     std::list<AST_element>::iterator get_iterator();
 
-    std::string to_string();
+    void output(std::ostream &output);
 
     void pop_depend();
 

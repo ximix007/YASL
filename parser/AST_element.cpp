@@ -1,6 +1,7 @@
 #include <list>
 #include <string>
 #include <iterator>
+#include <ostream>
 
 #include "../tokenisation/tokenisation.h"
 
@@ -22,16 +23,14 @@ std::list<AST_element>::iterator AST_element::get_iterator(){
     return it;
 }
 
-std::string AST_element::to_string(){
-    std::string result;
-    result.append(token_to_string(primary_token));
-    result.append("( ");
+void AST_element::output(std::ostream &output){
+    output << token_to_string(primary_token);
+    output << "( ";
     for(std::list<AST_element>::iterator it = get_iterator(); it != depend_tokens.end(); it++){
-        result.append(it->to_string());
-        result.append(", ");
+        it->output(output);
+        output << ", ";
     }
-    result.append(" )");
-    return result;
+    output << " )";
 }
 
 void AST_element::pop_depend(){

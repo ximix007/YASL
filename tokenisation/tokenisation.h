@@ -1,8 +1,8 @@
 #ifndef TOKENISATION_H
 #define TOKENISATION_H
 
-#include <list>
 #include <fstream>
+#include <vector>
 #include "token_type.h"
 
 struct token{
@@ -10,7 +10,7 @@ struct token{
     std::string token_data;
 };
 
-typedef std::list<token>* list_of_token;
+typedef std::vector<token>* list_of_token;
 
 list_of_token tokenisation(std::ifstream &code);
 

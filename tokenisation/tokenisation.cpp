@@ -25,7 +25,7 @@ list_of_token token_serialize(list_of_token token_list){
         std::cout << "error in open file for token serializing" << std::endl;
     }
 
-    std::list<token>::iterator it;
+    std::vector<token>::iterator it;
     for( it = token_list->begin(); it != token_list->end(); it++){
         myfile << token_to_string(*it);
     }
@@ -60,18 +60,17 @@ token check_token(std::string raw_token){
 }
 
 list_of_token tokenisation(std::ifstream &code){
-    list_of_token result = new std::list<token>();
+    list_of_token result = new std::vector<token>();
 
     std::string raw_token;
-    while (!code.eof())
-    {
+    while (!code.eof()){
         char f = code.get();
         if(is_delimiter(f)) {
             result->push_back(check_token(raw_token));
             raw_token = "";
         }
         else raw_token += f;
-    }
+    };
     code.close();
     return result;
 }

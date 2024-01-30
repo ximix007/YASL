@@ -1,4 +1,6 @@
 #include <iterator>
+#include <iostream>
+#include <exception>
 
 #include "../tokenisation/tokenisation.h"
 #include "../tokenisation/token_type.h"
@@ -6,13 +8,50 @@
 
 #include "parsing.h"
 
-std::string parsing(list_of_token tokens){
-    AST_element main = AST_element(token{NULL_TOKEN, "main"});
-    
-    std::list<token>::iterator it;
-    for(it = tokens->begin(); it != tokens->end(); it++){
-        main.add_depend(AST_element(*it));
+bool Parser::is_parsed(){
+    if(current < tokens->size()){
+        return false;
+    }
+    return true;
+}
+
+AST_element Parser::match_token(token_type type){
+    token result = tokens->at(current);
+    std::cout << token_to_string(result) << std::endl;
+
+    if(result.type == type){
+        current ++;
+        return AST_element(result);
     }
 
-    return main.to_string();
+    current ++;
+    std::cerr << "wrong token" << std::endl;
+    return AST_element();
 }
+
+void Parser::expression(AST_element& context){
+    AST_element result = match_token(NUMBER);
+    
+    for(; (*tokens)[current].token_data != ";"; ){
+        AST_element op = match_token(OPERATOR);
+        AST_element second = match_token(NUMBER);
+
+        op.add_depend(result);
+        op.add_depend(second);
+
+        result = op;    
+    }
+
+    current++;
+    context.add_depend(result);
+}
+
+AST_element Parser::parse(){
+    AST_element main = AST_element(token{NULL_TOKEN, "main"});
+    while (!is_parsed()){
+        expression(main);
+    }
+    return main;
+}
+
+Parser::Parser(list_of_token tokens): tokens {tokens} {};
