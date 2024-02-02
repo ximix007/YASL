@@ -2,10 +2,6 @@
 #include <iostream>
 #include <exception>
 
-#include "../tokenisation/tokenisation.h"
-#include "../tokenisation/token_type.h"
-#include "AST_element.h"
-
 #include "parsing.h"
 
 bool Parser::is_parsed(){
@@ -17,7 +13,6 @@ bool Parser::is_parsed(){
 
 AST_element Parser::match_token(token_type type){
     token result = tokens->at(current);
-    std::cout << token_to_string(result) << std::endl;
 
     if(result.type == type){
         current ++;

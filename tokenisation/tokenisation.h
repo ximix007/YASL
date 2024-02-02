@@ -3,7 +3,12 @@
 
 #include <fstream>
 #include <vector>
-#include "token_type.h"
+
+enum token_type{
+    NULL_TOKEN,
+    NUMBER,
+    OPERATOR
+};
 
 struct token{
     token_type type;

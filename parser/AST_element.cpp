@@ -1,10 +1,3 @@
-#include <list>
-#include <string>
-#include <iterator>
-#include <ostream>
-
-#include "../tokenisation/tokenisation.h"
-
 #include "AST_element.h"
 
 AST_element::AST_element(token token): primary_token {token}{}
@@ -25,6 +18,9 @@ std::list<AST_element>::iterator AST_element::get_iterator(){
 
 void AST_element::output(std::ostream &output){
     output << token_to_string(primary_token);
+    
+    if(depend_tokens.empty()) return;
+
     output << "( ";
     for(std::list<AST_element>::iterator it = get_iterator(); it != depend_tokens.end(); it++){
         it->output(output);

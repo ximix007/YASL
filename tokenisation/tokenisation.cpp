@@ -4,8 +4,6 @@
 #include <string>
 #include <iterator>
 
-#include "token_type.h"
-
 #include "tokenisation.h"
 
 std::string token_to_string(token x){

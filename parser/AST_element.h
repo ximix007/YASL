@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 #include <iterator>
+#include <ostream>
 
 #include "../tokenisation/tokenisation.h"
 
