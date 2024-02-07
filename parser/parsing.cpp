@@ -43,6 +43,9 @@ void Parser::expression(AST_element& context){
 
 AST_element Parser::parse(){
     AST_element main = AST_element(token{NULL_TOKEN, "main"});
+    main.create_scope();
+    main.get_scope()->add_pointer("print", {"print"});
+    std::cout << main.get_scope()->get_pointer("print").name;
     while (!is_parsed()){
         expression(main);
     }

@@ -36,3 +36,15 @@ void AST_element::pop_depend(){
 AST_element AST_element::get_last_depend(){
     return depend_tokens.back();
 }
+
+void AST_element::create_scope(){
+    scope = new Scope();
+}
+
+Scope* AST_element::get_scope(){
+    return scope;
+}
+
+AST_element::~AST_element(){
+    if(scope != nullptr) delete scope;
+}

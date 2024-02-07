@@ -3,6 +3,7 @@
 
 #include "../tokenisation/tokenisation.h"
 #include "AST_element.h"
+#include "scope.h"
 
 class Parser{
     list_of_token tokens;
