@@ -7,7 +7,8 @@
 enum token_type{
     NULL_TOKEN,
     NUMBER,
-    OPERATOR
+    OPERATOR,
+    IDENTIFIER
 };
 
 struct token{

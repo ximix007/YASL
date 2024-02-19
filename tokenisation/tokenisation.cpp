@@ -42,6 +42,12 @@ bool is_operator_char(char x){
            (123 <= x && x <= 126);
 }
 
+bool is_identifier_char(char x){
+    return  (65 <= x && x <= 90) ||
+            (97 <= x && x <= 122) ||
+            (x == 95);
+}
+
 bool is_delimiter(char x){
     return x == ' ' || x == '\n';
 }
@@ -53,20 +59,39 @@ token check_token(std::string raw_token){
     if (is_operator_char(raw_token[0])){
         return token{OPERATOR, raw_token};
     }
+    if (is_identifier_char(raw_token[0])){
+        return token{IDENTIFIER, raw_token};
+    }
     return token{};
 }
 
 list_of_token tokenisation(std::ifstream &code){
     list_of_token result = new std::vector<token>();
 
-    std::string raw_token;
     while (!code.eof()){
-        char f = code.get();
-        if(is_delimiter(f)) {
-            result->push_back(check_token(raw_token));
-            raw_token = "";
+        std::string current_line;
+        std::getline(code, current_line);
+
+        for(unsigned i = 0; i < current_line.size(); i++){
+            unsigned temp = i;
+            if(is_number(current_line[i])){
+                while(is_number(current_line[i+1])){
+                    i++;
+                }
+            }
+            if(is_operator_char(current_line[i])){
+                while(is_operator_char(current_line[i+1])){
+                    i++;
+                }
+            }
+            if(is_identifier_char(current_line[i])){
+                while(is_identifier_char(current_line[i+1])){
+                    i++;
+                }
+            }
+            if(is_delimiter(current_line[i])) continue;
+            result->push_back(check_token(current_line.substr(temp, i-temp + 1)));
         }
-        else raw_token += f;
     };
     code.close();
     return result;
