@@ -17,10 +17,12 @@ public:
 
 private:
     bool is_parsed();
+    token get_current();
 
     AST_element match_token(token_type type);
 
     void expression(AST_element& context);
+    AST_element parse_value();
 };
 
 #endif

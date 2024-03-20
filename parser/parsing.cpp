@@ -11,8 +11,12 @@ bool Parser::is_parsed(){
     return true;
 }
 
+token Parser::get_current(){
+    return tokens->at(current);
+}
+
 AST_element Parser::match_token(token_type type){
-    token result = tokens->at(current);
+    token result = get_current();
 
     if(result.type == type){
         current ++;
@@ -24,12 +28,32 @@ AST_element Parser::match_token(token_type type){
     return AST_element();
 }
 
+AST_element Parser::parse_value(){
+    AST_element result = AST_element();
+    token_type type = NULL_TOKEN;
+
+    switch (get_current().type){
+        case IDENTIFIER:
+            type = IDENTIFIER;
+            break;
+        case NUMBER:
+            type = NUMBER;
+            break;
+        default:
+            std::cerr << "not value" << std::endl;
+            break;
+    }
+    result = match_token(type);
+
+    return result;
+}
+
 void Parser::expression(AST_element& context){
-    AST_element result = match_token(NUMBER);
+    AST_element result = parse_value();
     
-    for(; (*tokens)[current].token_data != ";"; ){
+    for(; get_current().token_data != ";"; ){
         AST_element op = match_token(OPERATOR);
-        AST_element second = match_token(NUMBER);
+        AST_element second = parse_value();
 
         op.add_depend(result);
         op.add_depend(second);
@@ -45,7 +69,7 @@ AST_element Parser::parse(){
     AST_element main = AST_element(token{NULL_TOKEN, "main"});
     main.create_scope();
     main.get_scope()->add_pointer("print", {"print"});
-    std::cout << main.get_scope()->get_pointer("print").name;
+    //std::cout << main.get_scope()->get_pointer("print").name;
     while (!is_parsed()){
         expression(main);
     }
