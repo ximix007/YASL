@@ -20,6 +20,7 @@ private:
     token get_current();
 
     AST_element match_token(token_type type);
+    AST_element match_token_data(std::string data);
 
     void expression(AST_element& context);
     AST_element parse_value();

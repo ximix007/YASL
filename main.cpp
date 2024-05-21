@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
     source_code.open(argv[1]);
     if (source_code.is_open()){
         list_of_token token_list = tokenisation(source_code);
+        std::cout << "Tokenized" << std::endl;
         token_serialize(token_list);
         Parser parser = Parser(token_list);
 

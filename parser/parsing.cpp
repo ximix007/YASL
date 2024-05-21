@@ -24,26 +24,46 @@ AST_element Parser::match_token(token_type type){
     }
 
     current ++;
+    std::cerr << "wrong token " << current << std::endl;
+    return AST_element();
+}
+
+AST_element Parser::match_token_data(std::string data){
+    token result = get_current();
+
+    if(result.token_data == data){
+        current ++;
+        return AST_element(result);
+    }
+
+    current ++;
     std::cerr << "wrong token" << std::endl;
     return AST_element();
 }
 
 AST_element Parser::parse_value(){
     AST_element result = AST_element();
-    token_type type = NULL_TOKEN;
 
     switch (get_current().type){
         case IDENTIFIER:
-            type = IDENTIFIER;
+            result = match_token(IDENTIFIER);
+            if(get_current().token_data == "("){
+                match_token_data("(");
+                while(get_current().token_data != ")"){
+                    expression(result);
+                    match_token_data(",");
+                }
+                match_token_data(")");
+            }
             break;
         case NUMBER:
-            type = NUMBER;
+            result = match_token(NUMBER);
             break;
         default:
             std::cerr << "not value" << std::endl;
             break;
     }
-    result = match_token(type);
+    
 
     return result;
 }
@@ -51,7 +71,7 @@ AST_element Parser::parse_value(){
 void Parser::expression(AST_element& context){
     AST_element result = parse_value();
     
-    for(; get_current().token_data != ";"; ){
+    while(get_current().token_data != ";"){
         AST_element op = match_token(OPERATOR);
         AST_element second = parse_value();
 
