@@ -26,7 +26,7 @@ list_of_token token_serialize(list_of_token token_list){
 
     std::vector<token>::iterator it;
     for( it = token_list->begin(); it != token_list->end(); it++){
-        myfile << token_to_string(*it);
+        myfile << token_to_string(*it) << std::endl;
     }
 
     myfile.close();
@@ -41,27 +41,25 @@ bool is_operator_char(char x){
     return (33 <= x && x <= 39) ||
            (42 <= x && x <= 43) ||
            (45 <= x && x <= 47) ||
-           (58 <= x && x <= 63) ||
+           (60 <= x && x <= 63) ||
            (91 <= x && x <= 94) ||
-           (123 <= x && x <= 126);
+           x == '|' || x == ':' ||
+           x == '~';
 }
 
 bool is_identifier_char(char x){
     return  (65 <= x && x <= 90) ||
             (97 <= x && x <= 122) ||
-            (x == 95);
+            (x == '_');
 }
 
 bool is_delimiter(char x){
     return x == ' ' || x == '\n';
 }
 
-bool is_bracket(char x){
-    return x == '(' || x == ')';
-}
-
-bool is_coma(char x){
-    return x == ',';
+bool is_punctuator(char x){
+    return x == '(' || x == ')' ||
+    x == '{' || x == '}' || x == ';';
 }
 
 token check_token(std::string raw_token){
@@ -76,10 +74,10 @@ token check_token(std::string raw_token){
             if(raw_token == keywords[i]) return token{KEYWORD, raw_token};
         return token{IDENTIFIER, raw_token};
     }
-    if (is_bracket(raw_token[0])){
-        return token{BRACKET, raw_token};
+    if (is_punctuator(raw_token[0])){
+        return token{PUNCTUATOR, raw_token};
     }
-    if (is_coma(raw_token[0])){
+    if (raw_token[0] == ','){
         return token{COMA, raw_token};
     }
     return token{NULL_TOKEN, raw_token};

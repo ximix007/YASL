@@ -3,13 +3,17 @@
 
 #include <fstream>
 #include <vector>
+#include <iostream>
+#include <list>
+#include <string>
+#include <iterator>
 
 enum token_type{
     NULL_TOKEN,
     NUMBER,
     OPERATOR,
     IDENTIFIER,
-    BRACKET,
+    PUNCTUATOR,
     COMA,
     KEYWORD
 };
@@ -21,9 +25,9 @@ struct token{
 
 typedef std::vector<token>* list_of_token;
 
-const int KEYWORD_COUNT = 4;
+const int KEYWORD_COUNT = 5;
 
-const std::string keywords[KEYWORD_COUNT] = {"func", "if", "for", "class"};
+const std::string keywords[KEYWORD_COUNT] = {"func", "if", "for", "class", "return"};
 
 list_of_token tokenisation(std::ifstream &code);
 
