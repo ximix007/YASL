@@ -3,6 +3,7 @@
 #include "parser/AST_element.h"
 #include "tokenisation/tokenisation.h"
 #include "parser/parsing.h"
+#include "codegen/codegen.h"
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +21,14 @@ int main(int argc, char* argv[])
 
         std::ofstream parsedump;
         parsedump.open("AST.txt");
-        parser.parse().output(parsedump);
+        AST_element ast = parser.parse();
+        ast.output(parsedump);
+        parsedump.close();
+
+        std::ofstream wat;
+        wat.open("code.wat");
+        code_generation(ast, wat);
+        wat.close();
 
         token_list_delete(token_list);
 

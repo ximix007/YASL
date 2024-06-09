@@ -3,5 +3,6 @@
 *.exe
 *.txt
 *.o
+*.wat
 
 .vscode/

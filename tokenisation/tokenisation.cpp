@@ -10,7 +10,9 @@ std::string token_to_string(token x){
     result.append("{ ");
     result.append(std::to_string(x.type));
     result.append("; ");
+    result.append("\"");
     result.append(x.token_data);
+    result.append("\"");
     result.append(" }");
     return result;
 }
@@ -36,7 +38,9 @@ bool is_number(char x){
 }
 
 bool is_operator_char(char x){
-    return (33 <= x && x <= 47) ||
+    return (33 <= x && x <= 39) ||
+           (42 <= x && x <= 43) ||
+           (45 <= x && x <= 47) ||
            (58 <= x && x <= 63) ||
            (91 <= x && x <= 94) ||
            (123 <= x && x <= 126);
@@ -52,6 +56,14 @@ bool is_delimiter(char x){
     return x == ' ' || x == '\n';
 }
 
+bool is_bracket(char x){
+    return x == '(' || x == ')';
+}
+
+bool is_coma(char x){
+    return x == ',';
+}
+
 token check_token(std::string raw_token){
     if (is_number(raw_token[0])){
         return token{NUMBER, raw_token};
@@ -60,9 +72,17 @@ token check_token(std::string raw_token){
         return token{OPERATOR, raw_token};
     }
     if (is_identifier_char(raw_token[0])){
+        for(unsigned int i = 0; i < KEYWORD_COUNT ; i++)
+            if(raw_token == keywords[i]) return token{KEYWORD, raw_token};
         return token{IDENTIFIER, raw_token};
     }
-    return token{};
+    if (is_bracket(raw_token[0])){
+        return token{BRACKET, raw_token};
+    }
+    if (is_coma(raw_token[0])){
+        return token{COMA, raw_token};
+    }
+    return token{NULL_TOKEN, raw_token};
 }
 
 list_of_token tokenisation(std::ifstream &code){
@@ -73,6 +93,7 @@ list_of_token tokenisation(std::ifstream &code){
         std::getline(code, current_line);
 
         for(unsigned i = 0; i < current_line.size(); i++){
+            if(is_delimiter(current_line[i])) continue;
             unsigned temp = i;
             if(is_number(current_line[i])){
                 while(is_number(current_line[i+1])){
@@ -89,7 +110,8 @@ list_of_token tokenisation(std::ifstream &code){
                     i++;
                 }
             }
-            if(is_delimiter(current_line[i])) continue;
+
+            if(current_line.substr(temp, i-temp + 1) == "//") break;
             result->push_back(check_token(current_line.substr(temp, i-temp + 1)));
         }
     };

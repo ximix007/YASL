@@ -23,8 +23,11 @@ AST_element Parser::match_token(token_type type){
         return AST_element(result);
     }
 
+    std::cerr << "wrong token " << current + 1
+     << " expected data " << type << 
+     " instead " << result.type << std::endl;
+    
     current ++;
-    std::cerr << "wrong token " << current << std::endl;
     return AST_element();
 }
 
@@ -36,8 +39,11 @@ AST_element Parser::match_token_data(std::string data){
         return AST_element(result);
     }
 
+    std::cerr << "wrong token " << current + 1
+     << " expected data " << data << 
+     " instead " << result.token_data << std::endl;
+    
     current ++;
-    std::cerr << "wrong token" << std::endl;
     return AST_element();
 }
 
@@ -49,9 +55,12 @@ AST_element Parser::parse_value(){
             result = match_token(IDENTIFIER);
             if(get_current().token_data == "("){
                 match_token_data("(");
-                while(get_current().token_data != ")"){
+                if(get_current().token_data != ")"){
                     expression(result);
+                }
+                while(get_current().token_data == ","){
                     match_token_data(",");
+                    expression(result);
                 }
                 match_token_data(")");
             }
@@ -64,14 +73,13 @@ AST_element Parser::parse_value(){
             break;
     }
     
-
     return result;
 }
 
 void Parser::expression(AST_element& context){
     AST_element result = parse_value();
     
-    while(get_current().token_data != ";"){
+    while(get_current().type == OPERATOR && get_current().token_data != ";"){
         AST_element op = match_token(OPERATOR);
         AST_element second = parse_value();
 
@@ -81,17 +89,17 @@ void Parser::expression(AST_element& context){
         result = op;    
     }
 
-    current++;
     context.add_depend(result);
 }
 
 AST_element Parser::parse(){
-    AST_element main = AST_element(token{NULL_TOKEN, "main"});
+    AST_element main = AST_element(token{NULL_TOKEN, "module"});
     main.create_scope();
     main.get_scope()->add_pointer("print", {"print"});
     //std::cout << main.get_scope()->get_pointer("print").name;
     while (!is_parsed()){
         expression(main);
+        match_token_data(";");
     }
     return main;
 }

@@ -8,7 +8,10 @@ enum token_type{
     NULL_TOKEN,
     NUMBER,
     OPERATOR,
-    IDENTIFIER
+    IDENTIFIER,
+    BRACKET,
+    COMA,
+    KEYWORD
 };
 
 struct token{
@@ -17,6 +20,10 @@ struct token{
 };
 
 typedef std::vector<token>* list_of_token;
+
+const int KEYWORD_COUNT = 4;
+
+const std::string keywords[KEYWORD_COUNT] = {"func", "if", "for", "class"};
 
 list_of_token tokenisation(std::ifstream &code);
 
