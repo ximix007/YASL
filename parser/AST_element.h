@@ -12,7 +12,7 @@
 class AST_element{
 public:
     token primary_token;
-    std::list<AST_element> depend_tokens;
+    std::vector<AST_element> depend_tokens;
     Scope* scope = nullptr;
 
     AST_element(token token);
@@ -21,13 +21,11 @@ public:
 
     void add_depend(AST_element depend);
 
-    std::list<AST_element>::iterator get_iterator();
+    std::vector<AST_element>::iterator get_iterator();
 
     void output(std::ostream &output);
 
     void pop_depend();
-
-    AST_element get_last_depend();
 
     void create_scope();
 
@@ -35,5 +33,7 @@ public:
 
     ~AST_element();
 };
+
+
 
 #endif

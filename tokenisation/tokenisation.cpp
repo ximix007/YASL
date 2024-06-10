@@ -1,8 +1,3 @@
-#include <iostream>
-#include <list>
-#include <string>
-#include <iterator>
-
 #include "tokenisation.h"
 
 std::string token_to_string(token x){

@@ -163,6 +163,7 @@ void Parser::function_declaration(AST_element& context){
         }
     }
     match_token_data("}");
+    result.add_depend(body);
 
     context.add_depend(result);
 }

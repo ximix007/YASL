@@ -10,8 +10,8 @@ void AST_element::add_depend(AST_element depend){
     depend_tokens.push_back(depend);
 }
 
-std::list<AST_element>::iterator AST_element::get_iterator(){
-    std::list<AST_element>::iterator it;
+std::vector<AST_element>::iterator AST_element::get_iterator(){
+    std::vector<AST_element>::iterator it;
     it = depend_tokens.begin();
     return it;
 }
@@ -22,7 +22,7 @@ void AST_element::output(std::ostream &output){
     if(depend_tokens.empty()) return;
 
     output << "( ";
-    for(std::list<AST_element>::iterator it = get_iterator(); it != depend_tokens.end(); it++){
+    for(std::vector<AST_element>::iterator it = get_iterator(); it != depend_tokens.end(); it++){
         it->output(output);
         output << ", ";
     }
@@ -31,10 +31,6 @@ void AST_element::output(std::ostream &output){
 
 void AST_element::pop_depend(){
     depend_tokens.pop_back();
-}
-
-AST_element AST_element::get_last_depend(){
-    return depend_tokens.back();
 }
 
 void AST_element::create_scope(){

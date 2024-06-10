@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
         std::ofstream wat;
         wat.open("code.wat");
         code_generation(ast, wat);
-        wat.close();
+        wat << "  ";
 
         token_list_delete(token_list);
 

@@ -5,7 +5,9 @@
 #include <unordered_map>
 
 struct pointer{
-    std::string name;
+    std::string type;
+    bool local;
+    std::string address;
 };
 
 class Scope{
