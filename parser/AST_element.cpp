@@ -34,13 +34,9 @@ void AST_element::pop_depend(){
 }
 
 void AST_element::create_scope(){
-    scope = new Scope();
+    scope = &Scope();
 }
 
 Scope* AST_element::get_scope(){
     return scope;
-}
-
-AST_element::~AST_element(){
-    if(scope != nullptr) delete scope;
 }
