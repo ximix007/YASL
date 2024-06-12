@@ -13,7 +13,7 @@ class AST_element{
 public:
     token primary_token;
     std::vector<AST_element> depend_tokens;
-    Scope* scope = nullptr;
+    Scope scope;
 
     AST_element(token token);
 
@@ -30,8 +30,6 @@ public:
     void create_scope();
 
     Scope* get_scope();
-
-    ~AST_element();
 };
 
 
