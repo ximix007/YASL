@@ -1,9 +1,9 @@
 #include "AST_element.h"
 
-AST_element::AST_element(token token): primary_token {token}{}
+AST_element::AST_element(token p_token): p_token {p_token}{}
 
 AST_element::AST_element(){
-    primary_token = token{NULL_TOKEN, ""};
+    p_token = token{NULL_TOKEN, ""};
 }
 
 void AST_element::add_depend(AST_element depend){
@@ -17,7 +17,7 @@ std::vector<AST_element>::iterator AST_element::get_iterator(){
 }
 
 void AST_element::output(std::ostream &output){
-    output << token_to_string(primary_token);
+    output << token_to_string(p_token);
     
     if(depend_tokens.empty()) return;
 

@@ -54,6 +54,10 @@ AST_element Parser::parse_value(){
     switch (get_current().type){
         case IDENTIFIER:
             result = match_token(IDENTIFIER);
+            if(get_current().type == IDENTIFIER)
+            {
+                result.add_depend(match_token(IDENTIFIER));
+            }
             if(get_current().token_data == "("){
                 match_token_data("(");
                 if(get_current().token_data != ")"){
@@ -77,6 +81,15 @@ AST_element Parser::parse_value(){
     return result;
 }
 
+int operator_priority(std::string operator_){
+    for(unsigned i = 0; i < BINARY_OPERATORS_COUNT; i++){
+        if(binary_operator_priority[i] == operator_){
+            return i;
+        }
+    }
+    return -1;
+}
+
 void Parser::simple_expression(AST_element& context){
     AST_element result = parse_value();
     
@@ -84,10 +97,17 @@ void Parser::simple_expression(AST_element& context){
         AST_element op = match_token(OPERATOR);
         AST_element second = parse_value();
 
-        op.add_depend(result);
-        op.add_depend(second);
+        if(operator_priority(result.p_token.token_data) <= operator_priority(op.p_token.token_data)){
+            op.add_depend(result);
+            op.add_depend(second);
 
-        result = op;
+            result = op;
+        } else {
+            op.add_depend(result.depend_tokens[1]);
+            op.add_depend(second);
+
+            result.depend_tokens[1] = op;
+        }
     }
 
     context.add_depend(result);
@@ -101,11 +121,6 @@ void Parser::expression(AST_element& context){
     }
     if(get_current().token_data == "func"){
         function_declaration(context);
-    }
-    if(get_next().token_data == "=" ||
-    (get_current().type == IDENTIFIER &&
-    get_next().type == IDENTIFIER)){
-        assignment(context);
     }
 }
 

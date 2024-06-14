@@ -11,11 +11,11 @@
 
 class AST_element{
 public:
-    token primary_token;
+    token p_token;
     std::vector<AST_element> depend_tokens;
     Scope scope;
 
-    AST_element(token token);
+    AST_element(token p_token);
 
     AST_element();
 
