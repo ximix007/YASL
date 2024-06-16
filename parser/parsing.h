@@ -8,9 +8,9 @@
 #include "AST_element.h"
 #include "scope.h"
 
-const int BINARY_OPERATORS_COUNT = 4;
+const int BINARY_OPERATORS_COUNT = 7;
 
-const std::string binary_operator_priority[BINARY_OPERATORS_COUNT] = {"*", "+", "-", "="};
+const std::string binary_operator_priority[BINARY_OPERATORS_COUNT] = {"*", "+", "-", "<", ">", "==", "="};
 
 class Parser{
     list_of_token tokens;

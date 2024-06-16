@@ -1,6 +1,7 @@
 #ifndef TOKENISATION_H
 #define TOKENISATION_H
 
+#include <sstream>
 #include <fstream>
 #include <vector>
 #include <iostream>

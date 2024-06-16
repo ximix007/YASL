@@ -1,15 +1,14 @@
 #include "tokenisation.h"
 
 std::string token_to_string(token x){
-    std::string result;
-    result.append("{ ");
-    result.append(std::to_string(x.type));
-    result.append("; ");
-    result.append("\"");
-    result.append(x.token_data);
-    result.append("\"");
-    result.append(" }");
-    return result;
+    std::stringstream result("");
+    
+    result << "{ "
+    << std::to_string(x.type)
+    << "; " << "\"" 
+    << x.token_data << "\"" << " }";
+
+    return result.str();
 }
 
 list_of_token token_serialize(list_of_token token_list){

@@ -21,6 +21,15 @@ void expressions_generation(AST_element ast, std::ostream &output, Scope* contex
         if(ast.p_token.token_data == "*"){
             postefect = "i32.mul";
         }
+        if(ast.p_token.token_data == "<"){
+            postefect = "i32.lt_s";
+        }
+        if(ast.p_token.token_data == ">"){
+            postefect = "i32.gt_s";
+        }
+        if(ast.p_token.token_data == "=="){
+            postefect = "i32.eq";
+        }
     }
     if(ast.p_token.type == NUMBER){
         preefect = "i32.const " + ast.p_token.token_data;
