@@ -5,10 +5,18 @@ void expressions_generation(AST_element ast, std::ostream &output, Scope* contex
     std::string postefect = "";
 
     if(ast.p_token.token_data == "="){
-        expressions_generation(ast.depend_tokens[1], output, context);
+        expressions_generation(ast.depend_tokens[0], output, context);
         postefect = "local.set ";
         postefect.append(context->get_pointer(ast.depend_tokens[0].p_token.token_data).address); 
         output << postefect << std::endl;
+        return;
+    }
+    if(ast.p_token.token_data == "if"){
+        expressions_generation(ast.depend_tokens[0], output, context);
+        output << "( if" << std::endl;
+        output << "( then" << std::endl;
+        expressions_generation(ast.depend_tokens[1], output, context);
+        output << "))" << std::endl;
         return;
     }
     if(ast.p_token.type == OPERATOR){

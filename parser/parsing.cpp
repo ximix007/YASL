@@ -90,6 +90,25 @@ int operator_priority(std::string operator_){
     return -1;
 }
 
+void Parser::if_statement(AST_element& context){
+    AST_element result = match_token_data("if");
+
+    AST_element condition = match_token_data("(");
+    simple_expression(condition);
+    result.add_depend(condition);
+    match_token_data(")");
+
+    AST_element body = match_token_data("{");
+    while(get_current().token_data != "}"){
+        expression(body);
+        match_token_data(";");
+    }
+    match_token_data("}");
+    result.add_depend(body);
+
+    context.add_depend(result);
+}
+
 void Parser::simple_expression(AST_element& context){
     AST_element result = parse_value();
     
@@ -121,6 +140,9 @@ void Parser::expression(AST_element& context){
     }
     if(get_current().token_data == "func"){
         function_declaration(context);
+    }
+    if(get_current().token_data == "if"){
+        if_statement(context);
     }
 }
 
@@ -169,11 +191,11 @@ void Parser::function_declaration(AST_element& context){
     while(get_current().token_data != "}"){
         if(get_current().token_data == "return"){
             AST_element return_ = AST_element(match_token_data("return"));
-            simple_expression(return_);
+            expression(return_);
             match_token_data(";");
             body.add_depend(return_);
         } else {
-            simple_expression(body);
+            expression(body);
             match_token_data(";");
         }
     }

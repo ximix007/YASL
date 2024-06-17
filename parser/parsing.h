@@ -30,6 +30,7 @@ private:
     AST_element match_token(token_type type);
     AST_element match_token_data(std::string data);
 
+    void if_statement(AST_element& context);
     void simple_expression(AST_element& context);
     void expression(AST_element& context);
     void assignment(AST_element& context);
