@@ -59,14 +59,15 @@ AST_element Parser::parse_value(){
                 result.add_depend(match_token(IDENTIFIER));
             }
             if(get_current().token_data == "("){
-                match_token_data("(");
+                AST_element arguments = match_token_data("(");
                 if(get_current().token_data != ")"){
-                    simple_expression(result);
+                    simple_expression(arguments);
                 }
                 while(get_current().token_data == ","){
                     match_token_data(",");
-                    simple_expression(result);
+                    simple_expression(arguments);
                 }
+                result.add_depend(arguments);
                 match_token_data(")");
             }
             break;
@@ -207,8 +208,6 @@ void Parser::function_declaration(AST_element& context){
 
 AST_element Parser::parse(){
     AST_element main = AST_element(token{NULL_TOKEN, "module"});
-    main.create_scope();
-    main.get_scope()->add_pointer("print", {"print"});
     while (!is_parsed()){
         expression(main);
         match_token_data(";");

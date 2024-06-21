@@ -46,7 +46,12 @@ void expressions_generation(AST_element ast, std::ostream &output, Scope* contex
         if(ast.depend_tokens.empty()){
             preefect = "local.get ";
             postefect = context->get_pointer(ast.p_token.token_data).address;
-        }
+        } else {
+            if(ast.depend_tokens[0].p_token.token_data == "(")
+            {
+                postefect = "call " + context->get_pointer(ast.p_token.token_data).address;
+            };
+        } 
     };
 
     output << preefect;
@@ -59,9 +64,13 @@ void expressions_generation(AST_element ast, std::ostream &output, Scope* contex
     output.flush();
 };
 
-void function_processing(AST_element ast, std::ostream &output){
+void function_processing(AST_element ast, std::ostream &output, Scope* context){
     ast.create_scope();
-    output << "(func";
+    output << "(func $" << ast.depend_tokens[1].p_token.token_data;
+
+    context->add_pointer(ast.depend_tokens[1].p_token.token_data, {"func", false, "$" + ast.depend_tokens[1].p_token.token_data});
+
+    ast.get_scope()->set_outer(context);
 
     output << "(export \""
     << ast.depend_tokens[1].p_token.token_data
@@ -93,12 +102,14 @@ void function_processing(AST_element ast, std::ostream &output){
     output << ")" << std::endl;
 }
 
-void code_generation(AST_element ast, std::ostream &output, AST_element parent, unsigned position){
+void code_generation(AST_element ast, std::ostream &output){
     output << "(module" << std::endl;
+
+    ast.create_scope();
     
     for(unsigned i = 0; i < ast.depend_tokens.size(); i++){
         if(ast.depend_tokens[i].p_token.token_data == "func"){
-            function_processing(ast.depend_tokens[i], output);
+            function_processing(ast.depend_tokens[i], output, ast.get_scope());
         }
     };
     
